@@ -1,0 +1,83 @@
+doctype html
+html
+  head
+    link(href='style.css' rel='stylesheet')
+    link(href='homeStyle.css' rel='stylesheet')
+  body
+    header
+      nav
+        #navHome
+          a(href="/") Review Everything
+        form(id="search" action="") 
+          select(id="typeOfSearch" name="typeOfSearch")
+            option(value='title') Movie Name
+            option(value='actor') Actor
+            option(value='genre') Genre
+          input(id="searchInput" name="movieSearch" type="text" placeholder="Search for movie")
+          //- input(type="image", src="", alt="")
+        #profileButton
+          a(id="profileText" onclick="document.getElementById('profile_modal').style.display='block'") Profile
+    block content
+    #profile_modal(class="modal")
+      if !currentUserId
+        .profile_modal_button(type='button' onclick="document.getElementById('login_modal').style.display='block'; document.getElementById('profile_modal').style.display='none'") Login
+        .profile_modal_button(type='button' onclick="document.getElementById('signup_modal').style.display='block'; document.getElementById('profile_modal').style.display='none'") SignUp
+      else
+        .profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none'" href="/user/currentUserId") See Profile
+        .profile_modal_button(type='button' onclick="document.getElementById('profile_modal').style.display='none'") Logout
+        //- (click)='onLogout();'
+      .profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none'") Close
+    #login_modal.modal
+      form(action="")
+        #login_form
+          label(for='email') email: 
+          input.form_input(type='email')
+          label(for='password') password: 
+          input.form_input(type='password')
+          //- re-captcha#captcha(#captcharef='reCaptcha' (resolved)='onLogin($event)' sitekey='6LdZFNsUAAAAAEE6xC0Mlmg661lCyN0TmkWIgtBQ' theme='dark light')
+          #btn_holder
+            input.form_buttons(type='button' onclick="document.getElementById('login_modal').style.display='none'" value='Cancel')
+            input.form_buttons(type='button' onclick="document.getElementById('signup_modal').style.display='block'; document.getElementById('login_modal').style.display='none'; document.getElementById('forgetPasswrodBtn').style.display='none'" value='Create an account')
+            input#forgotPasswordBtn.form_buttons(type='button' onclick="document.getElementById('forgot_modal').style.display='block'; document.getElementById('login_modal').style.display='none';" value='Forgot Password')
+            input.form_buttons(type='submit' value='Login')
+    #signup_modal.modal
+      form(action="")
+        #login_form
+          label(for='username') Username: 
+          input.form_input(type='text')
+          label(for='email') Email: 
+          input.form_input(type='email')
+          label(for='fname') First Name: 
+          input.form_input(type='text')
+          label(for='lname') Last Name: 
+          input.form_input(type='text')
+          label(for='password') Password: 
+          input.form_input(type='password')
+          #btn_holder
+            input.form_buttons(type='button' onclick="document.getElementById('signup_modal').style.display='none'" value='Cancel')
+            input.form_buttons(type='button' onclick="document.getElementById('login_modal').style.display='block'; document.getElementById('signup_modal').style.display='none'" value='Already have an account?')
+            input.form_buttons(type='submit' value='Signup')
+    #forgot_modal.modal
+      form(action="")
+        #login_form
+          label(for='email') Email: 
+          input.form_input(formcontrolname='email' type='email' [ngclass]="{ 'is-invalid': forgotSubmitted && forgotEr.email.errors }")
+          #btn_holder
+            input.form_buttons(type='button' onclick="document.getElementById('forgot_modal').style.display='none'" value='Cancel')
+            input.form_buttons(type='submit' value='Submit')
+    #editPass_modal.modal
+      form(action="")
+        #login_form
+          label(for='passwordInput') Edit password
+          br
+          input#passwordInput.form_input(type='password')
+          #btn_holder
+            input.form_buttons(type='button' onclick="document.getElementById('editPass_modal').style.display='none'" value='Cancel')
+            input.form_buttons(type='submit' value='Submit')
+      br
+    //- #mobile_nav
+    //-   a#mobileNavHome(href="/")
+    //-     img#navHomeImg(onclick="document.getElementById('signup_modal').style.display='none'; document.getElementById('login_modal').style.display='none';" src='../assets/home.png' alt='home')
+    //-   img#mobileProfileButton(onclick="document.getElementById('profile_modal').style.display='block'" src='../assets/navDefaultProfile.png' alt='home')
+
+

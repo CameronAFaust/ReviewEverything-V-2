@@ -1,0 +1,94 @@
+#what_to_watch {
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 15px;
+  width: fit-content;
+  padding: 10px 10%;
+  text-align: center;
+  font-size: 28px;
+  background-color: rgba(42, 85, 140, 0.8);
+  -webkit-filter: drop-shadow(5px 5px 5px #000);
+  filter: drop-shadow(5px 5px 5px #000);
+}
+
+#popularMovies {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: auto;
+  justify-content: center;
+}
+
+#background {
+  /* padding-top: 15px; */
+  width: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+
+#foreground {
+  padding-top: 80px;
+  padding-bottom: 80px;
+  /* backdrop-filter: blur(3px); */
+}
+
+#movie_holder {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+#movie_card {
+  display: flex;
+  width: 200px;
+  flex-direction: column;
+  height: 300px;
+  -webkit-filter: drop-shadow(5px 5px 5px #000);
+  filter: drop-shadow(5px 5px 5px #000);
+}
+
+#movie_poster {
+  width: 100%;
+}
+
+#movie_title {
+  font-size: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+#movie_text {
+  min-height: 60px;
+  max-height: 60px;
+  padding: 5px;
+  background-color: rgb(42, 85, 140);
+  background-color: rgba(42, 85, 140, 0.9);
+  max-width: 190px;
+}
+
+#release_date {
+  font-size: 18px;
+  margin-left: 10px;
+  padding-top: 0px;
+}
+
+#searchText {
+  margin: 0;
+  text-align: center;
+}
+
+a {
+  text-decoration : none;
+  color: white;
+}
+
+@media screen and (max-width: 800px) {
+  #what_to_watch {
+      margin-top: 100px;
+  }
+  #popularMovies {
+      margin-bottom: 100px;
+  }
+}

@@ -1,0 +1,205 @@
+html {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+}
+nav {
+  display: flex;
+  justify-content: center;
+  padding: 5px 1px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #122A40;
+  height: 55px;
+  z-index: 1000;
+}
+
+#navHome {
+  flex: 2;
+  font-size: 20px;
+  margin: 0;
+  padding: 10px;
+  color: #D90416;
+  margin: auto;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#search {
+  display: flex;
+  height: 35px;
+  margin: auto;
+}
+
+#searchInput {
+  width: 300px;
+  padding-left: 10px;
+  /* border-radius: 25px; */
+}
+
+#profileButton {
+  flex: 2;
+  font-size: 20px;
+  margin: 0;
+  padding: 10px;
+  color: rgba(217, 4, 22, .95);
+  margin: auto;
+  text-align: right;
+}
+
+#profileText{
+  cursor: pointer;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#profile_modal {
+  position: fixed;
+  height: fit-content;
+  text-align: right;
+  left: inherit;
+  width: 20%;
+  min-width: 100px;
+  max-width: 150px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+  right: 0px;
+  z-index: 1;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1001;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  /* overflow: auto; */
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.8);
+  padding-top: 60px;
+}
+
+.profile_modal_button {
+  padding: 5px;
+  margin: 5px 10px 5px 10px;
+  cursor: pointer;
+}
+
+.profile_modal_button:hover {
+  background-color: rgba(217, 4, 22, .7);
+}
+
+#login_form{
+  display: flex;
+  flex-direction: column;
+  background-color: #fefefe;
+  color: #000;
+  margin: 5% auto 15% auto;
+  border: 1px solid #888;
+  width: 50%;
+  padding: 16px;
+}
+
+.form_input {
+  margin: 5px 0;
+  padding: 5px 10px;
+}
+
+#btn_holder {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile_modal_button {
+  padding: 5px;
+  margin: 5px 10px 5px 10px;
+  cursor: pointer;
+}
+
+#mobile_nav {
+  display: none;
+  justify-content: center;
+  padding: 5px 1;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #122A40;
+  height: 8%;
+  z-index: 1000;
+  border-top: 2px solid #D90416;
+  padding-top: 10px;
+}
+
+#mobileNavHome {
+  margin: auto;
+  height: 100%;
+}
+
+#mobileProfileButton {
+  margin: auto;
+  height: 100%;
+}
+
+#navHomeImg {
+  max-height: 100%;
+  min-height: 100%;
+  flex-shrink: 0;
+}
+
+a {
+  text-decoration: none;
+  color: rgba(217, 4, 22, .95);
+}
+
+@media screen and (max-width: 800px) {
+  #navHome { display: none;}
+  #profileButton { display: none;}
+  #spacer { display: none;}
+  #search {
+    flex-direction: column;
+    width: 90%;
+    align-items: center;
+  }
+  #typeOfSearch {
+    padding: 10px;
+    width: 80%;
+  }
+  #searchInput {
+    padding: 10px;
+    width: 95%;
+    text-align: center;
+  }
+  #searchButton {
+    display: none;
+  }
+  #mobile_nav {
+    display: flex;
+  }
+  #profile_modal {
+    width: 100%;
+    text-align: center;
+    min-width: inherit;
+    max-width: inherit;
+    bottom: 9%;
+    justify-content: center;
+    position: fixed;
+    top: inherit;
+    font-size: 25px;
+    padding: 0;
+  }
+  #btn_holder {
+    flex-direction: column;
+  }
+  .form_buttons {
+    margin: 3px 0;
+  }
+  .form_input {
+    margin: 7px 0;
+  }
+}
