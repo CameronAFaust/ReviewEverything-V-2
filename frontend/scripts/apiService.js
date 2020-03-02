@@ -81,35 +81,160 @@ genres = [
 ]
 // MOVIE
 function getMovieDetailsById(MovieId){
-  return this.httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}?api_key=${this.API_KEY}&language=en-US`);
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}?api_key=${API_KEY}&language=en-US`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        movies = JSON.parse(data);
+        if (!movies.runtime) {
+          movies.runtime = 0;
+        }        
+        movies.budget = movies.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        movies.revenue = movies.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        resolve(movies)
+      });
+    });
+  });
 }
 function getMovieIdByName(MovieName){
-  return this.httpClient.get(`https://api.themoviedb.org/3/search/movie?api_key=${this.API_KEY}&language=en-US&query=${MovieName}&page=1&include_adult=false`);
-}
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${MovieName}&page=1&include_adult=false`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        searchList = JSON.parse(data).results;
+        // console.log(searchList);
+        
+        searchList.forEach(movie => {
+          if (movie.title.length > 25) {
+            movie.title = movie.title.substring(0, 25);
+            movie.title += "...";
+          }
+        });
+        searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+        resolve(searchList);
+      });
+    });
+  });}
 function getActorsInMovie(MovieId){
-  return this.httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}/credits?api_key=${this.API_KEY}`);
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}/credits?api_key=${API_KEY}`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        movieCredits = JSON.parse(data);
+        movieCredits = movieCredits.cast
+        if (movieCredits.length > 10) { movieCredits.length = 10; }
+        resolve(movieCredits);
+      });
+    });
+  });
 }
 function getMovieRecommendations(MovieId){
-  return this.httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}/recommendations?api_key=${this.API_KEY}`);
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}/recommendations?api_key=${API_KEY}`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        recommendations = JSON.parse(data);
+        recommendations = recommendations.results;
+        if (recommendations.length > 6) { recommendations.length = 6; }
+        resolve(recommendations);
+      });
+    });
+  });
 }
 // ACTOR
 function getActorIdByName(ActorName){
-  return this.httpClient.get(`https://api.themoviedb.org/3/search/person?api_key=${this.API_KEY}&language=en-US&query=${ActorName}&include_adult=false`);
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/search/person?api_key=${API_KEY}&language=en-US&query=${ActorName}&include_adult=false`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        searchList = JSON.parse(data).results;
+        searchDescription = 'Actor search results for: "' + params.get('id') + '"';
+        searchList.forEach(movie => {
+          if (movie.name.length > 25) {
+            movie.name = movie.title.substring(0, 25);
+            movie.name += "...";
+          }
+        });
+        searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+        resolve({searchList, searchDescription});
+      });
+    });
+  });
 }
 function getActorMoviesById(ActorId){
-  return this.httpClient.get(`https://api.themoviedb.org/3/person/${ActorId}/movie_credits?api_key=${this.API_KEY}&language=en-US`);
+  return new Promise(resolve => {
+    httpClient.get(`https://api.themoviedb.org/3/person/${ActorId}/movie_credits?api_key=${API_KEY}&language=en-US`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        searchList = JSON.parse(data).results;
+        searchList.forEach(movie => {
+          if (movie.title.length > 25) {
+            movie.title = movie.title.substring(0, 25);
+            movie.title += "...";
+          }
+        });
+        searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+        resolve({searchList, searchDescription});
+      });
+    });
+  });
+  // return this.httpClient.get(`https://api.themoviedb.org/3/person/${ActorId}/movie_credits?api_key=${this.API_KEY}&language=en-US`);
 }
 // GENRE
 function getGenreMoviesById(genreName){
-  let genreId;
-  this.genres.forEach(genre => {
-    if (genre.name == genreName) {
-      genreId = genre.id
-    }
+  return new Promise(resolve => {
+    let genreId;
+    genres.forEach(genre => {
+      if (genre.name == genreName) {
+        genreId = genre.id
+      }
+    });
+    httpClient.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId}`, (resp) => {
+      let data = '';  
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+  
+      resp.on('end', () => {
+        let searchList = JSON.parse(data).results;
+        // console.log(searchList);
+        
+        searchList.forEach(movie => {
+          if (movie.title.length > 25) {
+            movie.title = movie.title.substring(0, 25);
+            movie.title += "...";
+          }
+        });
+        searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
+        resolve(searchList);
+      });
+    });
   });
-  return this.httpClient.get(`https://api.themoviedb.org/3/discover/movie?api_key=${this.API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreId} `);
 }
-
 // popular movie
 function getPopularMovies(){
   return new Promise(resolve => {
@@ -157,5 +282,12 @@ function getPopularPeople(){
 
 module.exports = {
   getPopularMovies,
-  getPopularPeople
+  getPopularPeople,
+  getMovieIdByName,
+  getMovieDetailsById,
+  getActorsInMovie,
+  getMovieRecommendations,
+  getActorIdByName,
+  getActorMoviesById,
+  getGenreMoviesById
 }

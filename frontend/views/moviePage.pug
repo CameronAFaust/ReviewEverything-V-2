@@ -1,0 +1,110 @@
+extends layout
+
+block content
+  #holder
+    #movieHolder
+      #movie_details(style={'background-image': 'url(https://image.tmdb.org/t/p/original/' + movies.backdrop_path + ')'})
+        #details_holder
+          if movies.poster_path
+            div
+              img#movie_poster(src='https://image.tmdb.org/t/p/original/' + movies.poster_path alt='Movie Poster')
+          else
+            div
+              img#movie_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+          #text_holder
+            #title_holder
+              h1#title= movies.title
+              p#release_date= (movies.release_date)
+            p#tagline= movies.tagline
+            p#description= movies.overview
+            #more_details
+              p#runtime
+                b Runtime: 
+                = movies.runtime 
+                minutes
+              p#budget
+                b Budget: 
+                = movies.budget
+              p#revenue
+                b Revenue: 
+                = movies.revenue
+    if movieCredits.length > 0
+      div
+        h2#movieCredits Credits:
+        #credits
+          each credit in movieCredits
+            #actor_holder
+              a(href='/search/actors_movies/' + credit.id + '/' + credit.name)
+                #actor_card
+                  if credit.profile_path
+                    div
+                      img#actor_poster(src='https://image.tmdb.org/t/p/original/' + credit.profile_path alt='Movie Poster')
+                  else
+                    div(*ngif='!credit.profile_path')
+                      img#actor_poster(src='../assets/defaultProfile.png' alt='Movie Poster')
+                  #actor_text
+                    p#actor_title= credit.name 
+                    if credit.character
+                      div
+                        p#actor_title as
+                        p#actor_title= credit.character 
+    if recommendations.length > 0
+      div
+        h2#movieCredits What people also liked:
+        #credits
+          for movie in recommendations
+            #actor_holder
+              a(href='/movie/' + movie.id)
+                #actor_card
+                  if movie.poster_path
+                    div
+                      img#actor_poster(src='https://image.tmdb.org/t/p/original/' + movie.poster_path alt='Movie Poster')
+                  else
+                    div
+                      img#actor_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+                  #actor_text
+                    p#actor_title= movie.title 
+    //- #reviewSection
+      div
+        h1#reveiw_seaction_header= movies.title + "' Reviews"
+        hr
+        form#reviewForm()
+          br
+          textarea#reviewText(formcontrolname='reviewText' maxlength='200' [ngclass]="{ 'is-invalid': reviewSubmitted && reviewEr.reviewText.errors }" placeholder='Leave your own review')
+          .invalid-feedback(*ngif='reviewSubmitted && reviewEr.reviewText.errors')
+            div(*ngif='reviewEr.reviewText.errors.required') review text is required
+          br
+          label(for='reviewRating') Rating: 
+          br
+          ngx-stars#stars((ratingoutput)='onRatingSet($event)' [maxstars]='5')
+          br
+          input(type='submit' value='submit')
+      #allReviews
+        h3 User Reviews
+        hr
+        #reviewCard(*ngfor='let review of reviews')
+          button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
+          button(*ngif='currentUserId == review.user_id' (click)='populateEditForm({reviewTitle: review.review_title, reviewText: review.review_text, reviewRating: review.rating, id: review.id})') edit
+          p {{review.review_title}}
+          ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
+          p by {{review.username}}
+          p {{review.review_text}}
+          hr
+  //- #edit_modal.modal
+    form#reviewForm([formgroup]='reviewForm' (ngsubmit)='onReviewSubmit()')
+      #edit_form
+        label(for='editReviewText') Description: 
+        textarea#editReviewText.form_input(formcontrolname='editReviewText' maxlength='200' [ngclass]="{ 'is-invalid': reviewSubmitted && reviewEr.reviewText.errors }")
+        .invalid-feedback(*ngif='reviewSubmitted && reviewEr.reviewText.errors')
+          div(*ngif='reviewEr.reviewText.errors.required') review text is required
+        br
+        label(for='reviewRating') Rating: 
+        ngx-stars((ratingoutput)='onRatingSet($event)' [initialstars]='' [maxstars]='5')
+        //
+          <div *ngIf="reviewSubmitted && reviewEr.reviewRating.errors" class="invalid-feedback">
+          <div *ngIf="reviewEr.reviewRating.errors.required">review rating is required</div>
+          </div>
+        br
+        #btn_holder
+          input.form_buttons(type='button' onclick="document.getElementById('edit_modal').style.display='none'" value='Cancel')
+          input.form_buttons(type='submit' value='edit')

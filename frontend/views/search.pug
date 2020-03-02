@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  h2#searchText= searchDescription
+  if searchType == 'title' || searchType == 'actors_movies' || searchType == 'actors_movies' || searchType == 'genre'
+    #movie_search_holder
+      each result in searchList
+        a(href="/movie/" + result.id)
+          #movie_card(style={'background-image': 'url(https://image.tmdb.org/t/p/original/' + result.backdrop_path + ')'})
+            if result.poster_path
+              div
+                img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.poster_path alt='Movie Poster')
+            else
+              div
+                img#movie_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+            #movie_text
+              p#movie_title= result.title
+              p#release_date= (result.release_date)
+  else
+    #movie_search_holder
+      each result in searchList
+        a(href='/search/actors_movies/'+ result.id + "/" + result.name)
+          #movie_card
+            if result.profile_path
+              div
+                img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.profile_path alt='Movie Poster')
+            else
+              div
+                img#movie_poster(src='../assets/defaultProfile.png' alt='Movie Poster')
+            #movie_text
+              p#movie_title= result.name
