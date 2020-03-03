@@ -41,6 +41,14 @@ nav {
   /* border-radius: 25px; */
 }
 
+#searchButton {
+  width: 15px;
+  height: 15px;
+  margin: auto;
+  margin-left: -30px;
+  margin-right: 10px;
+}
+
 #profileButton {
   flex: 2;
   font-size: 20px;

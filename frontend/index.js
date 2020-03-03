@@ -22,7 +22,6 @@ app.get('/', async function(req, res){
 
 // Movie Page
 app.get('/movie/:id', async function(req, res){
-  console.log(req.params);
   let movieData = await apiService.getMovieDetailsById(req.params.id);  
   let movieCredits = await apiService.getActorsInMovie(req.params.id);  
   let recommendations = await apiService.getMovieRecommendations(req.params.id);  
@@ -35,8 +34,6 @@ app.get('/movie/:id', async function(req, res){
 
 // Search page
 app.get('/search/:type/:id/:actorName?', async function(req, res){
-  // let searchList;
-  // let searchDescription;
   if (req.params.type == 'title') {
     searchList = await apiService.getMovieIdByName(req.params.id);
     searchDescription = 'Movies search results for: "' + req.params.id + '"';
@@ -47,8 +44,6 @@ app.get('/search/:type/:id/:actorName?', async function(req, res){
     searchList = await apiService.getActorMoviesById(req.params.id);
     searchDescription = 'Movies with the actor: "' + req.params.actorName + '"';
   } else {
-    console.log("here?");
-    
     searchList = await apiService.getGenreMoviesById(req.params.id);
     searchDescription = 'Genre search results for: "' + req.params.id + '"';
   }

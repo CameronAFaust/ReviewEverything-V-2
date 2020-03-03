@@ -28,9 +28,10 @@
 }
 
 #movie_text {
-  padding: 5px 0;
-  min-height: 90px;
-  max-height: 90px;
+  /* padding: 5px; */
+  min-height: 100px;
+  max-height: 100px;
+  max-width: 200px;
   background-color: rgb(42, 85, 140);
   background-color: rgba(42, 85, 140, 0.4);
 }
@@ -42,7 +43,7 @@
 }
 
 #searchText {
-  margin: 0;
+  margin-top: 80px;
   text-align: center;
 }
 

@@ -10,7 +10,7 @@ block content
               img#movie_poster(src='https://image.tmdb.org/t/p/original/' + movies.poster_path alt='Movie Poster')
           else
             div
-              img#movie_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+              img#movie_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
           #text_holder
             #title_holder
               h1#title= movies.title
@@ -41,7 +41,7 @@ block content
                       img#actor_poster(src='https://image.tmdb.org/t/p/original/' + credit.profile_path alt='Movie Poster')
                   else
                     div(*ngif='!credit.profile_path')
-                      img#actor_poster(src='../assets/defaultProfile.png' alt='Movie Poster')
+                      img#actor_poster(src='/static/assets/defaultProfile.png' alt='Movie Poster')
                   #actor_text
                     p#actor_title= credit.name 
                     if credit.character
@@ -61,7 +61,7 @@ block content
                       img#actor_poster(src='https://image.tmdb.org/t/p/original/' + movie.poster_path alt='Movie Poster')
                   else
                     div
-                      img#actor_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+                      img#actor_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
                   #actor_text
                     p#actor_title= movie.title 
     //- #reviewSection

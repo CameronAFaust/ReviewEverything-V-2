@@ -6,18 +6,18 @@ block content
       h2#what_to_watch Popular movies this week:
       #popularMovies
         each result in popularMovies
-          #movie_holder
+          #home_movie_holder
             a(href="/movie/" + result.id)
-              #movie_card
-                img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.poster_path + '' alt='Movie Poster')
-              #movie_text
+              #home_movie_card
+                img#home_movie_poster(src='https://image.tmdb.org/t/p/original/' + result.poster_path + '' alt='Movie Poster')
+              #home_movie_text
                 p#movie_title= result.title
       h2#what_to_watch Popular People this week:
       #popularMovies
           each result in popularPeople
-            #movie_holder
+            #home_movie_holder
               a(href="/search/actors_movies/" + result.id + "/" + result.name)
-                #movie_card
-                  img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.profile_path + '' alt='Movie Poster')
-                  #movie_text
+                #home_movie_card
+                  img#home_movie_poster(src='https://image.tmdb.org/t/p/original/' + result.profile_path + '' alt='Movie Poster')
+                  #home_movie_text
                     p#movie_title= result.name

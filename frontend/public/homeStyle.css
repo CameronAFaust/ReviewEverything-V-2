@@ -34,12 +34,12 @@
   /* backdrop-filter: blur(3px); */
 }
 
-#movie_holder {
+#home_movie_holder {
   margin-left: 10px;
   margin-right: 10px;
 }
 
-#movie_card {
+#home_movie_card {
   display: flex;
   width: 200px;
   flex-direction: column;
@@ -48,7 +48,7 @@
   filter: drop-shadow(5px 5px 5px #000);
 }
 
-#movie_poster {
+#home_movie_poster {
   width: 100%;
 }
 
@@ -59,7 +59,7 @@
   margin-top: 10px;
 }
 
-#movie_text {
+#home_movie_text {
   min-height: 60px;
   max-height: 60px;
   padding: 5px;

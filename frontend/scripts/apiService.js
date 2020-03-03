@@ -109,9 +109,7 @@ function getMovieIdByName(MovieName){
       });
   
       resp.on('end', () => {
-        searchList = JSON.parse(data).results;
-        // console.log(searchList);
-        
+        searchList = JSON.parse(data).results;        
         searchList.forEach(movie => {
           if (movie.title.length > 25) {
             movie.title = movie.title.substring(0, 25);
@@ -190,7 +188,7 @@ function getActorMoviesById(ActorId){
       });
   
       resp.on('end', () => {
-        searchList = JSON.parse(data).results;
+        searchList = JSON.parse(data).cast;
         searchList.forEach(movie => {
           if (movie.title.length > 25) {
             movie.title = movie.title.substring(0, 25);
@@ -198,7 +196,7 @@ function getActorMoviesById(ActorId){
           }
         });
         searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
-        resolve({searchList, searchDescription});
+        resolve(searchList);
       });
     });
   });
@@ -221,7 +219,6 @@ function getGenreMoviesById(genreName){
   
       resp.on('end', () => {
         let searchList = JSON.parse(data).results;
-        // console.log(searchList);
         
         searchList.forEach(movie => {
           if (movie.title.length > 25) {
@@ -254,7 +251,6 @@ function getPopularMovies(){
             movie.title += "...";
           }
         });
-        // console.log(popularMovies[0]);
         resolve(popularMovies)
       });
     });

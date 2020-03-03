@@ -16,7 +16,7 @@ html
             option(value='actor') Actor
             option(value='genre') Genre
           input(id="searchInput" name="movieSearch" type="text" placeholder="Search for movie")
-          //- input(type="image", src="", alt="")
+          input#searchButton(type='image' src='/static/assets/search.png' alt='Submit')
         #profileButton
           a(id="profileText" onclick="document.getElementById('profile_modal').style.display='block'") Profile
     block content
@@ -63,7 +63,7 @@ html
       form(action="")
         #login_form
           label(for='email') Email: 
-          input.form_input(formcontrolname='email' type='email' [ngclass]="{ 'is-invalid': forgotSubmitted && forgotEr.email.errors }")
+          //- input.form_input(formcontrolname='email' type='email' [ngclass]="{ 'is-invalid': forgotSubmitted && forgotEr.email.errors }")
           #btn_holder
             input.form_buttons(type='button' onclick="document.getElementById('forgot_modal').style.display='none'" value='Cancel')
             input.form_buttons(type='submit' value='Submit')

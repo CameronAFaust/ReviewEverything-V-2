@@ -6,13 +6,14 @@ block content
     #movie_search_holder
       each result in searchList
         a(href="/movie/" + result.id)
-          #movie_card(style={'background-image': 'url(https://image.tmdb.org/t/p/original/' + result.backdrop_path + ')'})
+          #movie_card
+            //- #movie_card(style={'background-image': 'url(https://image.tmdb.org/t/p/original/' + result.backdrop_path + ')'})
             if result.poster_path
               div
                 img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.poster_path alt='Movie Poster')
             else
               div
-                img#movie_poster(src='../assets/poster-placeholder.jpg' alt='Movie Poster')
+                img#movie_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
             #movie_text
               p#movie_title= result.title
               p#release_date= (result.release_date)
@@ -26,6 +27,6 @@ block content
                 img#movie_poster(src='https://image.tmdb.org/t/p/original/' + result.profile_path alt='Movie Poster')
             else
               div
-                img#movie_poster(src='../assets/defaultProfile.png' alt='Movie Poster')
+                img#movie_poster(src='/static/assets/defaultProfile.png' alt='Movie Poster')
             #movie_text
               p#movie_title= result.name
