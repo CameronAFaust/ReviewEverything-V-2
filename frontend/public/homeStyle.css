@@ -2,13 +2,15 @@
   margin: auto;
   margin-top: 10px;
   margin-bottom: 15px;
-  width: fit-content;
-  padding: 10px 10%;
+  /* width: fit-content; */
+  width: 80%;
+  padding: 10px;
   text-align: center;
   font-size: 28px;
   background-color: rgba(42, 85, 140, 0.8);
   -webkit-filter: drop-shadow(5px 5px 5px #000);
   filter: drop-shadow(5px 5px 5px #000);
+  color: white;
 }
 
 #popularMovies {
@@ -57,6 +59,7 @@
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 10px;
+  padding: 0;
 }
 
 #home_movie_text {
@@ -66,6 +69,7 @@
   background-color: rgb(42, 85, 140);
   background-color: rgba(42, 85, 140, 0.9);
   max-width: 190px;
+  margin-bottom: 25px;
 }
 
 #release_date {

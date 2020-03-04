@@ -7,10 +7,10 @@ block content
         #details_holder
           if movies.poster_path
             div
-              img#movie_poster(src='https://image.tmdb.org/t/p/original/' + movies.poster_path alt='Movie Poster')
+              img#movie_movie_poster(src='https://image.tmdb.org/t/p/original/' + movies.poster_path alt='Movie Poster')
           else
             div
-              img#movie_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
+              img#movie_movie_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
           #text_holder
             #title_holder
               h1#title= movies.title
@@ -30,7 +30,7 @@ block content
                 = movies.revenue
     if movieCredits.length > 0
       div
-        h2#movieCredits Credits:
+        h2#what_to_watch Credits:
         #credits
           each credit in movieCredits
             #actor_holder
@@ -40,19 +40,18 @@ block content
                     div
                       img#actor_poster(src='https://image.tmdb.org/t/p/original/' + credit.profile_path alt='Movie Poster')
                   else
-                    div(*ngif='!credit.profile_path')
+                    div
                       img#actor_poster(src='/static/assets/defaultProfile.png' alt='Movie Poster')
                   #actor_text
-                    p#actor_title= credit.name 
+                    p#actor_title= credit.name
+                    p#actor_title as
                     if credit.character
-                      div
-                        p#actor_title as
-                        p#actor_title= credit.character 
+                      p#actor_title= credit.character 
     if recommendations.length > 0
       div
-        h2#movieCredits What people also liked:
+        h2#what_to_watch What people also liked:
         #credits
-          for movie in recommendations
+          each movie in recommendations
             #actor_holder
               a(href='/movie/' + movie.id)
                 #actor_card

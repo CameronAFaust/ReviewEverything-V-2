@@ -12,8 +12,9 @@ app.use("/static", express.static(path.join(__dirname+'/public')));
 
 // Home page
 app.get('/', async function(req, res){
-  let popularMovies = await apiService.getPopularMovies();
-  let popularPeople = await apiService.getPopularPeople();
+  let [popularMovies, popularPeople] = await Promise.all([apiService.getPopularMovies(), apiService.getPopularPeople()]);
+  // let popularMovies = await apiService.getPopularMovies();
+  // let popularPeople = await apiService.getPopularPeople();
   res.render('index', {
     "popularMovies": popularMovies,
     "popularPeople": popularPeople
@@ -22,14 +23,20 @@ app.get('/', async function(req, res){
 
 // Movie Page
 app.get('/movie/:id', async function(req, res){
-  let movieData = await apiService.getMovieDetailsById(req.params.id);  
-  let movieCredits = await apiService.getActorsInMovie(req.params.id);  
-  let recommendations = await apiService.getMovieRecommendations(req.params.id);  
+  let [movieData, movieCredits, recommendations] = await Promise.all([apiService.getMovieDetailsById(req.params.id), apiService.getActorsInMovie(req.params.id), apiService.getMovieRecommendations(req.params.id)]);
+  // let movieData = await apiService.getMovieDetailsById(req.params.id);  
+  // let movieCredits = await apiService.getActorsInMovie(req.params.id);  
+  // let recommendations = await apiService.getMovieRecommendations(req.params.id);  
   res.render('moviePage', {
     "movies": movieData,
     "movieCredits": movieCredits,
     "recommendations": recommendations
   });  
+});
+
+// When the user uses the search bar
+app.get('/search', async function(req, res){
+  res.redirect(`/search/${req.query.typeOfSearch}/${req.query.movieSearch}`);
 });
 
 // Search page

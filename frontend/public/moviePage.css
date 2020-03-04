@@ -44,8 +44,7 @@
   background-color: rgba(0,0,0, 0.65);
 }
 
-#movie_poster {
-  padding-top: 10px;
+#movie_movie_poster {
   width: 300px;
   filter: drop-shadow(5px 5px 10px #000);
 }
@@ -84,10 +83,10 @@
   border-radius: 5px;
 }
 
-p {
+/* p {
   font-size: 17px;
   margin: 5px;
-}
+} */
 
 #edit_form {
   display: flex;
@@ -121,6 +120,7 @@ p {
   max-width: 1400px;
   margin: auto;
   justify-content: center;
+  padding: 10px;
 }
 
 #actor_card {
@@ -140,14 +140,19 @@ p {
 }
 
 #actor_title {
+  padding: 5px;
+}
+
+#movie_actor_title {
   font-size: 20px;
   margin-left: 10px;
   margin-right: 10px;
   margin-top: 10px;
+  padding: 0;
 }
 
 #actor_text {
-  min-height: 130px;
+  min-height: 120px;
   padding: 5px;
   background-color: rgb(42, 85, 140);
   background-color: rgba(42, 85, 140, 0.6);

@@ -1,4 +1,4 @@
-const httpClient = require('https');
+ const httpClient = require('https');
 
 API_KEY = 'cb9a5be66beef417c07e14d9492341c3';
 genres = [
@@ -166,7 +166,6 @@ function getActorIdByName(ActorName){
   
       resp.on('end', () => {
         searchList = JSON.parse(data).results;
-        searchDescription = 'Actor search results for: "' + params.get('id') + '"';
         searchList.forEach(movie => {
           if (movie.name.length > 25) {
             movie.name = movie.title.substring(0, 25);
@@ -174,7 +173,7 @@ function getActorIdByName(ActorName){
           }
         });
         searchList = searchList.sort((a, b) => (a.popularity < b.popularity) ? 1 : -1)
-        resolve({searchList, searchDescription});
+        resolve(searchList);
       });
     });
   });
