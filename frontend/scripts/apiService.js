@@ -92,7 +92,9 @@ function getMovieDetailsById(MovieId){
         movies = JSON.parse(data);
         if (!movies.runtime) {
           movies.runtime = 0;
-        }        
+        }
+        if (!movies.budget) movies.budget = 0;
+        if (!movies.revenue) movies.revenue = 0;
         movies.budget = movies.budget.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         movies.revenue = movies.revenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         resolve(movies)
@@ -120,7 +122,8 @@ function getMovieIdByName(MovieName){
         resolve(searchList);
       });
     });
-  });}
+  });
+}
 function getActorsInMovie(MovieId){
   return new Promise(resolve => {
     httpClient.get(`https://api.themoviedb.org/3/movie/${MovieId}/credits?api_key=${API_KEY}`, (resp) => {
@@ -132,7 +135,11 @@ function getActorsInMovie(MovieId){
       resp.on('end', () => {
         movieCredits = JSON.parse(data);
         movieCredits = movieCredits.cast
-        if (movieCredits.length > 10) { movieCredits.length = 10; }
+        if (movieCredits) {
+          if (movieCredits.length > 10) { movieCredits.length = 10; }
+        } else {
+          movieCredits = []
+        }
         resolve(movieCredits);
       });
     });
@@ -148,8 +155,12 @@ function getMovieRecommendations(MovieId){
   
       resp.on('end', () => {
         recommendations = JSON.parse(data);
-        recommendations = recommendations.results;
-        if (recommendations.length > 6) { recommendations.length = 6; }
+        recommendations = recommendations.results;   
+        if (recommendations) {
+          if (recommendations.length > 6) { recommendations.length = 6; }
+        } else {
+          recommendations = []
+        }
         resolve(recommendations);
       });
     });

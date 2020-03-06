@@ -63,32 +63,31 @@ block content
                       img#actor_poster(src='/static/assets/poster-placeholder.jpg' alt='Movie Poster')
                   #actor_text
                     p#actor_title= movie.title 
-    //- #reviewSection
+    #reviewSection
       div
         h1#reveiw_seaction_header= movies.title + "' Reviews"
         hr
         form#reviewForm()
           br
-          textarea#reviewText(formcontrolname='reviewText' maxlength='200' [ngclass]="{ 'is-invalid': reviewSubmitted && reviewEr.reviewText.errors }" placeholder='Leave your own review')
-          .invalid-feedback(*ngif='reviewSubmitted && reviewEr.reviewText.errors')
-            div(*ngif='reviewEr.reviewText.errors.required') review text is required
-          br
-          label(for='reviewRating') Rating: 
-          br
-          ngx-stars#stars((ratingoutput)='onRatingSet($event)' [maxstars]='5')
+          textarea#reviewText(maxlength='200' placeholder='Leave your own review')
+          //- br
+          //- label(for='reviewRating') Rating: 
+          //- br
+          //- ngx-stars#stars((ratingoutput)='onRatingSet($event)' [maxstars]='5')
           br
           input(type='submit' value='submit')
       #allReviews
         h3 User Reviews
         hr
-        #reviewCard(*ngfor='let review of reviews')
-          button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
-          button(*ngif='currentUserId == review.user_id' (click)='populateEditForm({reviewTitle: review.review_title, reviewText: review.review_text, reviewRating: review.rating, id: review.id})') edit
-          p {{review.review_title}}
-          ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
-          p by {{review.username}}
-          p {{review.review_text}}
-          hr
+        each review in reviews
+          #reviewCard
+            //- button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
+            //- button(*ngif='currentUserId == review.user_id' (click)='populateEditForm({reviewTitle: review.review_title, reviewText: review.review_text, reviewRating: review.rating, id: review.id})') edit
+            p= review.review_title
+            //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
+            p= "by " + review.username
+            p= review.review_text
+            hr
   //- #edit_modal.modal
     form#reviewForm([formgroup]='reviewForm' (ngsubmit)='onReviewSubmit()')
       #edit_form
