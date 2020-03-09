@@ -82,7 +82,11 @@ block content
         each review in reviews
           #reviewCard
             //- button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
+            if currentUserId == review.user_id
+              button(click='deleteReview({ id: review.id  })') delete
             //- button(*ngif='currentUserId == review.user_id' (click)='populateEditForm({reviewTitle: review.review_title, reviewText: review.review_text, reviewRating: review.rating, id: review.id})') edit
+            if currentUserId == review.user_id
+              button(click='deleteReview({ id: review.id  })') edit
             p= review.review_title
             //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
             p= "by " + review.username
