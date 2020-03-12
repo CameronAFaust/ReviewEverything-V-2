@@ -1,10 +1,10 @@
 var MongoClient = require('mongodb').MongoClient
+var ObjectId = require('mongodb').ObjectID;
 
 var settings = {
   reconnectTries : Number.MAX_VALUE,
   autoReconnect : true
 };
-
 
 function getReviews(movie_id) {
   return new Promise(resolve => {
@@ -14,6 +14,22 @@ function getReviews(movie_id) {
       var db = client.db('ReviewEverything')    
       
       var query = { movie_id: `${movie_id}` };
+      db.collection('reviews').find(query).toArray(function (err, result) {
+        if (err) console.log(err)
+        resolve(result)
+      })
+    })
+  });
+}
+
+function getUsersReviews(user_id) {
+  return new Promise(resolve => {
+    MongoClient.connect('mongodb://localhost:27017/ReviewEverything', settings, function (err, client) {
+      if (err) console.log(err)
+    
+      var db = client.db('ReviewEverything')    
+      
+      var query = { user_id: `${user_id}` };
       db.collection('reviews').find(query).toArray(function (err, result) {
         if (err) console.log(err)
         resolve(result)
@@ -46,7 +62,25 @@ function editReview(review_id, review, rating) {
       
       let newReview = {review_text: review, rating: rating};
       
-      db.collection('reviews').update({id: review_id}, newReview, function (err, result) {
+      
+      db.collection('reviews').update({_id: ObjectId(review_id)}, {$set:  newReview}, function (err, result) {
+        if (err) console.log(err)
+        resolve(result)
+      })
+    })
+  });
+}
+
+function editReviewName(review_id, username) {
+  return new Promise(resolve => {
+    MongoClient.connect('mongodb://localhost:27017/ReviewEverything', settings, function (err, client) {
+      if (err) console.log(err)
+      var db = client.db('ReviewEverything')
+      
+      let newReview = {username: username};
+      
+      
+      db.collection('reviews').update({_id: ObjectId(review_id)}, {$set:  newReview}, function (err, result) {
         if (err) console.log(err)
         resolve(result)
       })
@@ -74,5 +108,7 @@ module.exports = {
   getReviews,
   createReview,
   editReview,
-  deleteReview
+  deleteReview,
+  getUsersReviews,
+  editReviewName
 }

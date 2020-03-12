@@ -203,6 +203,10 @@ a {
   padding-top: 60px;
 }
 
+.hidden {
+  display: none;
+}
+
 @media screen and (max-width: 800px) {
   #holder {
       margin-top: 100px;

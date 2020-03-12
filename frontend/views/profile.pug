@@ -1,0 +1,31 @@
+extends layout
+
+block content
+  if currentUserId == paramsId
+    #profile
+      //- (ngsubmit)='updateUsername()''
+      form(method="POST" action=`/editUser/${currentUserId}`)
+        label(for='usernameInput') Edit username
+        br
+        input#usernameInput(name="username" value=checkUser[0].username type='text')
+        br
+        label(for='emailInput') Edit email
+        br
+        input#emailInput(name="email" type='text' value=checkUser[0].email)
+        br
+        input(type='submit' value='edit user')
+      form(method="POST" action=`/editPassword`)
+        label(for='passwordInput') Edit password
+        br
+        input#passwordInput(name="password" type='password')
+        input(type='submit' value='edit password')
+      each review in reviews
+        #reviewCard
+          form#reviewForm(method="POST" action=`/editReview/${review.movie_id}/${review._id}`)
+            p= review.movie_name
+            //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
+            textarea#editReviewText.form_input(name="editText" maxlength='200')= review.review_text
+            //- hr
+            input(type='submit' value='edit')
+  if checkUser[0].is_admin == 1
+    button(click='deleteUser()') Delete User

@@ -5,6 +5,8 @@ html
     link(rel="stylesheet" href="/static/homeStyle.css")
     link(rel="stylesheet" href="/static/style.css")
     link(rel="stylesheet" href="/static/search.css")
+    link(rel="stylesheet" href="/static/profile.css")
+    script(src='/static/javascripts/app.js')
   body
     header
       nav
@@ -25,9 +27,8 @@ html
         .profile_modal_button(type='button' onclick="document.getElementById('login_modal').style.display='block'; document.getElementById('profile_modal').style.display='none'") Login
         .profile_modal_button(type='button' onclick="document.getElementById('signup_modal').style.display='block'; document.getElementById('profile_modal').style.display='none'") SignUp
       else
-        .profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none'" href="/user/currentUserId") See Profile
-        .profile_modal_button(type='button' onclick="document.getElementById('profile_modal').style.display='none'") Logout
-        //- (click)='onLogout();'
+        a.profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none'" href=`/user/${currentUserId}`) See Profile
+        a.profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none';" href="/logout") Logout
       .profile_modal_button(onclick="document.getElementById('profile_modal').style.display='none'") Close
     #login_modal.modal
       form(method="POST" action="/login")

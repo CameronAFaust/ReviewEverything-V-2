@@ -3,6 +3,8 @@ var pug = require('pug');
 var path = require('path');
 const http = require('http');
 const bodyParser = require('body-parser')
+const LocalStorage = require('node-localstorage').LocalStorage;
+localStorage = new LocalStorage('./scratch');
 
 const apiService = require("./scripts/apiService")
 const reviewService = require("./scripts/reviewService")
@@ -18,9 +20,11 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // Home page
 app.get('/', async function(req, res){
   let [popularMovies, popularPeople] = await Promise.all([apiService.getPopularMovies(), apiService.getPopularPeople()]);
+  let userid = localStorage.getItem('userId')
   res.render('index', {
     "popularMovies": popularMovies,
-    "popularPeople": popularPeople
+    "popularPeople": popularPeople,
+    "currentUserId": userid
   });  
 });
 
@@ -32,12 +36,14 @@ app.get('/movie/:id', async function(req, res){
     apiService.getMovieRecommendations(req.params.id),
     reviewService.getReviews(req.params.id)
   ]); 
-  
+  let userid = localStorage.getItem('userId')
   res.render('moviePage', {
     "movies": movieData,
     "movieCredits": movieCredits,
     "recommendations": recommendations,
-    "reviews": reviews
+    "reviews": reviews,
+    "movieID": req.params.id,
+    "currentUserId": userid
   });
 });
 
@@ -62,21 +68,50 @@ app.get('/search/:type/:id/:actorName?', async function(req, res){
     searchList = await apiService.getGenreMoviesById(req.params.id);
     searchDescription = 'Genre search results for: "' + req.params.id + '"';
   }
+  let userid = localStorage.getItem('userId')
+
   res.render('search', {
     "searchList": searchList,
     "searchDescription": searchDescription,
     "searchType": req.params.type,
-    "currentUserId": currentUserId
+    "currentUserId": currentUserId,
+    "currentUserId": userid
+  });  
+});
+
+// Profile page
+app.get('/user/:userid', async function(req, res){
+  let [checkUser, reviews] = await Promise.all([
+    userService.getUser(req.params.userid),
+    reviewService.getUsersReviews(req.params.userid)
+  ]);
+  await Promise.all(reviews.map(async (review) => {
+    let temp = await apiService.getMovieDetailsById(review.movie_id);
+    review['movie_name'] = temp.title
+  }));
+  
+  let userid = localStorage.getItem('userId')
+  res.render('profile', {
+    "checkUser": checkUser,
+    "reviews": reviews,
+    "paramsId": req.params.userid,
+    "currentUserId": userid
   });  
 });
 
 // Login handler
 app.post('/login', async function(req, res) {
-  if (await userService.login(req.body.email, req.body.password)) {
-    console.log(true);
-  } else {
-    console.log(false);
-  }
+  await userService.login(req.body.email, req.body.password)
+  console.log(localStorage.getItem('username'));
+  res.redirect(`/`); 
+});
+
+// Logout handler
+app.get('/logout', async function(req, res) {
+  console.log("here")
+  localStorage.removeItem('userId');
+  localStorage.removeItem('username');
+  res.redirect(`/`); 
 });
 
 // Signup handler
@@ -85,6 +120,36 @@ app.post('/signup', async function(req, res) {
   console.log(ren);
 });
 
+// Create new review
+app.post('/createReview/:movieID', async function(req, res) {
+  await reviewService.createReview(req.params.movieID, localStorage.getItem('userId'), localStorage.getItem('username'),  req.body.ratingText, "4.0");
+  res.redirect(`/movie/${req.params.movieID}`);
+});
+
+// Edit review
+app.post('/editReview/:movieID/:reviewID?', async function(req, res) {
+  if (req.params.reviewID) {
+    await reviewService.editReview(req.params.reviewID, req.body.editText, "4.0");
+  } else {
+    await reviewService.editReview(req.body.reviewID, req.body.editText, "4.0");
+  }
+  res.redirect(`/movie/${req.params.movieID}`);
+});
+
+app.post('/editUser/:user_id', async function(req, res) {
+  await userService.editUser(req.params.user_id, req.body.username, req.body.email);
+  let usersReviews = await reviewService.getUsersReviews(req.params.user_id);
+
+  await Promise.all(usersReviews.map(async (review) => {
+    // Change the reviews username
+    await reviewService.editReviewName(review._id, req.body.username)
+  }));
+  res.redirect(`/user/${req.params.user_id}`)
+});
+
+
+
 app.listen(3000);
 
 
+// {email: "test@test.com"}

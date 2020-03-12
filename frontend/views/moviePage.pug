@@ -67,9 +67,9 @@ block content
       div
         h1#reveiw_seaction_header= movies.title + "' Reviews"
         hr
-        form#reviewForm()
+        form#reviewForm(method="POST" action=`/createReview/${movieID}`)
           br
-          textarea#reviewText(maxlength='200' placeholder='Leave your own review')
+          textarea#reviewText(name="ratingText" maxlength='200' placeholder='Leave your own review')
           //- br
           //- label(for='reviewRating') Rating: 
           //- br
@@ -83,29 +83,26 @@ block content
           #reviewCard
             //- button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
             if currentUserId == review.user_id
-              button(click='deleteReview({ id: review.id  })') delete
-            //- button(*ngif='currentUserId == review.user_id' (click)='populateEditForm({reviewTitle: review.review_title, reviewText: review.review_text, reviewRating: review.rating, id: review.id})') edit
+              //- button(click='deleteReview({ id: review.id  })') delete
             if currentUserId == review.user_id
-              button(click='deleteReview({ id: review.id  })') edit
-            p= review.review_title
+              a(id="profileText" onclick=`
+              document.getElementById('edit_modal').style.display='block'; 
+              document.getElementById('editReviewText').value = '${review.review_text.replace(/(?:\r\n|\r|\n)/g, '\\n')}';
+              document.getElementById('editReviewID').value = '${review._id.toString()}';
+              `) edit
             //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
             p= "by " + review.username
             p= review.review_text
             hr
-  //- #edit_modal.modal
-    form#reviewForm([formgroup]='reviewForm' (ngsubmit)='onReviewSubmit()')
+  #edit_modal.modal
+    form#reviewForm(method="POST" action=`/editReview/${movieID}`)
       #edit_form
         label(for='editReviewText') Description: 
-        textarea#editReviewText.form_input(formcontrolname='editReviewText' maxlength='200' [ngclass]="{ 'is-invalid': reviewSubmitted && reviewEr.reviewText.errors }")
-        .invalid-feedback(*ngif='reviewSubmitted && reviewEr.reviewText.errors')
-          div(*ngif='reviewEr.reviewText.errors.required') review text is required
-        br
-        label(for='reviewRating') Rating: 
-        ngx-stars((ratingoutput)='onRatingSet($event)' [initialstars]='' [maxstars]='5')
-        //
-          <div *ngIf="reviewSubmitted && reviewEr.reviewRating.errors" class="invalid-feedback">
-          <div *ngIf="reviewEr.reviewRating.errors.required">review rating is required</div>
-          </div>
+        textarea#editReviewText.form_input(name="editText" maxlength='200')
+        textarea#editReviewID.hidden(name="reviewID")
+        //- br
+        //- label(for='reviewRating') Rating: 
+        //- ngx-stars((ratingoutput)='onRatingSet($event)' [initialstars]='' [maxstars]='5')
         br
         #btn_holder
           input.form_buttons(type='button' onclick="document.getElementById('edit_modal').style.display='none'" value='Cancel')
