@@ -70,10 +70,8 @@ block content
         form#reviewForm(method="POST" action=`/createReview/${movieID}`)
           br
           textarea#reviewText(name="ratingText" maxlength='200' placeholder='Leave your own review')
-          //- br
-          //- label(for='reviewRating') Rating: 
-          //- br
-          //- ngx-stars#stars((ratingoutput)='onRatingSet($event)' [maxstars]='5')
+          br
+          include star.pug
           br
           input(type='submit' value='submit')
       #allReviews
@@ -81,29 +79,7 @@ block content
         hr
         each review in reviews
           #reviewCard
-            //- button(*ngif='user[0].is_admin == 1 || currentUserId == review.user_id' (click)='deleteReview({ id: review.id  })') Delete
-            if currentUserId == review.user_id
-              //- button(click='deleteReview({ id: review.id  })') delete
-            if currentUserId == review.user_id
-              a(id="profileText" onclick=`
-              document.getElementById('edit_modal').style.display='block'; 
-              document.getElementById('editReviewText').value = '${review.review_text.replace(/(?:\r\n|\r|\n)/g, '\\n')}';
-              document.getElementById('editReviewID').value = '${review._id.toString()}';
-              `) edit
-            //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
+            p= review.rating / 2 + " stars"
             p= "by " + review.username
             p= review.review_text
             hr
-  #edit_modal.modal
-    form#reviewForm(method="POST" action=`/editReview/${movieID}`)
-      #edit_form
-        label(for='editReviewText') Description: 
-        textarea#editReviewText.form_input(name="editText" maxlength='200')
-        textarea#editReviewID.hidden(name="reviewID")
-        //- br
-        //- label(for='reviewRating') Rating: 
-        //- ngx-stars((ratingoutput)='onRatingSet($event)' [initialstars]='' [maxstars]='5')
-        br
-        #btn_holder
-          input.form_buttons(type='button' onclick="document.getElementById('edit_modal').style.display='none'" value='Cancel')
-          input.form_buttons(type='submit' value='edit')

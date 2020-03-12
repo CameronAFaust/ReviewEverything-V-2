@@ -3,7 +3,6 @@ extends layout
 block content
   if currentUserId == paramsId
     #profile
-      //- (ngsubmit)='updateUsername()''
       form(method="POST" action=`/editUser/${currentUserId}`)
         label(for='usernameInput') Edit username
         br
@@ -22,10 +21,8 @@ block content
       each review in reviews
         #reviewCard
           form#reviewForm(method="POST" action=`/editReview/${review.movie_id}/${review._id}`)
+            include star.pug
+            p= review.rating / 2 + " stars"
             p= review.movie_name
-            //- ngx-stars#stars([readonly]='true' [maxstars]='5' [initialstars]='review.rating')
             textarea#editReviewText.form_input(name="editText" maxlength='200')= review.review_text
-            //- hr
             input(type='submit' value='edit')
-  if checkUser[0].is_admin == 1
-    button(click='deleteUser()') Delete User

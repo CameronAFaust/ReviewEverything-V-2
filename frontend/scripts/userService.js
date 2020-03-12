@@ -17,10 +17,10 @@ function login(email, password) {
       function(err, client) {
         if (err) console.log(err);
         var db = client.db("ReviewEverything");
-
+        
         db.collection("users").find({ email: email }).toArray(function(err, result) {
           if (err) console.log(err);
-          bcrypt.compare(password, result[0].password).then((res) => {
+          bcrypt.compare(password, result[0].password, function(err, res) {
             if (res) {
               localStorage.setItem('userId', result[0]._id);
               localStorage.setItem('username', result[0].username);
@@ -55,6 +55,8 @@ function signup(username, password, fname, lname, email) {
 
             db.collection("users").insertOne(newUser, function(err, result) {
               if (err) console.log(err);
+              localStorage.setItem('userId', result.ops[0]._id);
+              localStorage.setItem('username', result.ops[0].username);
               resolve(result);
             });
           }
@@ -76,7 +78,7 @@ function editUser(user_id, username, email) {
 
         let updatedUser = { username: username, email: email };
 
-        db.collection("users").update({ _id: ObjectId(user_id) }, updatedUser, function(
+        db.collection("users").update({ _id: ObjectId(user_id) }, {$set: updatedUser}, function(
           err,
           result
         ) {

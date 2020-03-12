@@ -17,14 +17,18 @@ app.set('views', __dirname+'/views');
 app.use("/static", express.static(path.join(__dirname+'/public')));
 app.use(bodyParser.urlencoded({ extended: true }))
 
+var Recaptcha = require('express-recaptcha').RecaptchaV3;
+//import Recaptcha from 'express-recaptcha'
+var recaptcha = new Recaptcha('6LcbFNsUAAAAAG0-UMKAT0SjzL8jc_h2cDXUu60o', '6LcbFNsUAAAAAEucUrmEwPfiOhghbHop936jnV-T', {callback:'cb'});
 // Home page
-app.get('/', async function(req, res){
+app.get('/', recaptcha.middleware.render, async function(req, res){
   let [popularMovies, popularPeople] = await Promise.all([apiService.getPopularMovies(), apiService.getPopularPeople()]);
   let userid = localStorage.getItem('userId')
   res.render('index', {
     "popularMovies": popularMovies,
     "popularPeople": popularPeople,
-    "currentUserId": userid
+    "currentUserId": userid,
+    "captcha": res.recaptcha
   });  
 });
 
@@ -37,6 +41,7 @@ app.get('/movie/:id', async function(req, res){
     reviewService.getReviews(req.params.id)
   ]); 
   let userid = localStorage.getItem('userId')
+
   res.render('moviePage', {
     "movies": movieData,
     "movieCredits": movieCredits,
@@ -102,13 +107,11 @@ app.get('/user/:userid', async function(req, res){
 // Login handler
 app.post('/login', async function(req, res) {
   await userService.login(req.body.email, req.body.password)
-  console.log(localStorage.getItem('username'));
   res.redirect(`/`); 
 });
 
 // Logout handler
 app.get('/logout', async function(req, res) {
-  console.log("here")
   localStorage.removeItem('userId');
   localStorage.removeItem('username');
   res.redirect(`/`); 
@@ -117,21 +120,25 @@ app.get('/logout', async function(req, res) {
 // Signup handler
 app.post('/signup', async function(req, res) {
   let ren = await userService.signup(req.body.username, req.body.password, req.body.fname, req.body.lname, req.body.email)
-  console.log(ren);
+  res.redirect(`/`);
 });
 
 // Create new review
 app.post('/createReview/:movieID', async function(req, res) {
-  await reviewService.createReview(req.params.movieID, localStorage.getItem('userId'), localStorage.getItem('username'),  req.body.ratingText, "4.0");
+  console.log(req.body);
+  
+  await reviewService.createReview(req.params.movieID, localStorage.getItem('userId'), localStorage.getItem('username'),  req.body.ratingText, req.body.rating);
   res.redirect(`/movie/${req.params.movieID}`);
 });
 
 // Edit review
 app.post('/editReview/:movieID/:reviewID?', async function(req, res) {
+  console.log(req.body);
+  
   if (req.params.reviewID) {
-    await reviewService.editReview(req.params.reviewID, req.body.editText, "4.0");
+    await reviewService.editReview(req.params.reviewID, req.body.editText, req.body.rating);
   } else {
-    await reviewService.editReview(req.body.reviewID, req.body.editText, "4.0");
+    await reviewService.editReview(req.body.reviewID, req.body.editText, req.body.rating);
   }
   res.redirect(`/movie/${req.params.movieID}`);
 });

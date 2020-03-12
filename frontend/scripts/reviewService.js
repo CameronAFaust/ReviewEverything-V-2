@@ -61,9 +61,8 @@ function editReview(review_id, review, rating) {
       var db = client.db('ReviewEverything')
       
       let newReview = {review_text: review, rating: rating};
-      
-      
-      db.collection('reviews').update({_id: ObjectId(review_id)}, {$set:  newReview}, function (err, result) {
+
+      db.collection('reviews').update({_id: ObjectId(review_id)}, {$set: newReview}, function (err, result) {
         if (err) console.log(err)
         resolve(result)
       })
